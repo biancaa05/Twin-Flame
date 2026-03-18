@@ -107,20 +107,7 @@ service cloud.firestore {
 2. Buton share (□↑) → *Adaugă pe ecran principal*
 3. Confirmă → aplicația apare pe home screen
 
-> ⚠️ Pentru ca butonul de instalare să funcționeze complet, adaugă un `manifest.json` și un `service-worker.js` în rădăcina proiectului.
-
----
-
-## 🗂️ Structura proiectului
-
-```
-twinflame/
-├── index.html        # Întreaga aplicație (HTML + CSS + JS)
-├── manifest.json     # (opțional) PWA manifest
-├── service-worker.js # (opțional) PWA offline support
-├── icon-192.png      # (opțional) Iconiță PWA
-└── README.md
-```
+> ⚠️ Utilizatorii de IOS nu vor avea acces la toate funcționalitățile aplicației!
 
 ---
 
