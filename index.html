@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TwinFlame</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF4D8D">
+  <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+<div class="app">
+
+  <!-- SCREEN: INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="header">
+      <div class="heart">💌</div>
+      <h1>TwinFlame</h1>
+      <p>Spațiul vostru, doar al vostru</p>
+    </div>
+    <div style="height: 20px;"></div>
+    <input type="text" id="intro-name" placeholder="Cum te cheamă?" maxlength="15">
+    <button class="btn btn-pink" onclick="startApp()">Începe Povestea ✨</button>
+  </div>
+
+  <!-- SCREEN: PAIR -->
+  <div class="screen" id="screen-pair">
+    <div class="header">
+      <div class="heart">✨</div>
+      <h1>TwinFlame</h1>
+      <p id="pair-welcome"></p>
+    </div>
+    <div class="card">
+      <div class="card-label">Sunteți noi aici?</div>
+      <button class="btn btn-pink" onclick="generateCode()">Creează codul vostru 💞</button>
+    </div>
+    <div style="text-align:center; color: var(--grey); font-size: 12px; font-weight: bold;">SAU</div>
+    <div class="card">
+      <div class="card-label">Ai deja un cod?</div>
+      <input type="text" id="join-code-input" placeholder="Ex: A3K9BZ"
+             maxlength="6" style="text-transform:uppercase;letter-spacing:4px;text-align:center; margin-bottom: 12px;">
+      <button class="btn btn-dark" onclick="joinCode()">Conectează-te 🔗</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: CODE -->
+  <div class="screen" id="screen-code">
+    <div class="header">
+      <div class="heart">🔐</div>
+      <h1>Codul Secret</h1>
+      <p>Trimite-l jumătății tale</p>
+    </div>
+    <div class="code-box">
+      <div class="code" id="display-code">------</div>
+      <p style="font-size:12px; color: var(--grey); margin-top: 8px;">Valabil doar pentru voi doi</p>
+    </div>
+    <button class="btn btn-dark" onclick="copyCode()">📋 Copiază Codul</button>
+    <div style="height: 10px;"></div>
+    <button class="btn btn-pink" onclick="showMain()">Intră în aplicație 💕</button>
+  </div>
+
+  <!-- SCREEN: MAIN -->
+  <div class="screen" id="screen-main">
+    <div class="header" style="padding-bottom: 0; padding-top: 10px;">
+      <h1 style="font-size: 28px;">TwinFlame 💕</h1>
+    </div>
+
+    <div id="love-counter" style="text-align:center; margin-bottom: 4px; position: relative;">
+      <span style="font-size: 10px; color: var(--grey); font-weight: bold; letter-spacing: 1px; display: block;">
+        SUNTEM ÎMPREUNĂ DE
+        <span onclick="setAnniversaryDate()" style="cursor:pointer; color: var(--pink); margin-left: 5px;">⚙️</span>
+      </span>
+      <div id="days-count" style="font-size: 28px; font-weight: bold; color: var(--pink);">-- ZILE</div>
+    </div>
+
+    <div class="distance-badge" id="distance-display">📍 Se calculează distanța...</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="card" style="padding: 10px; text-align: center;" onclick="changePhoto()">
+        <div class="card-label">TU</div>
+        <img id="my-photo" src="https://placehold.co/200x120/FFE4E1/FF4D8D?text=📷" alt="Poza ta">
+      </div>
+      <div class="card" style="padding: 10px; text-align: center;">
+        <div class="card-label">PARTENER</div>
+        <img id="partner-photo" src="https://placehold.co/200x120/FFE4E1/FF4D8D?text=💕" alt="Poza partenerului">
+      </div>
+    </div>
+
+    <div class="battery-row">
+      🔋 <span style="min-width:60px">Tu: <span id="my-battery-level">--%</span></span>
+      <div class="battery-bar"><div class="battery-fill" id="my-battery-bar" style="width:0%"></div></div>
+      <span style="min-width:80px">Partener: <span id="partner-battery-level">--%</span></span>
+      <div class="battery-bar"><div class="battery-fill" id="partner-battery-bar" style="width:0%; background: var(--pink)"></div></div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div class="card-label" style="margin: 0;">Jumătatea ta</div>
+        <div class="status-dot" id="partner-online">⚪ Offline</div>
+      </div>
+      <h3>
+        <span id="partner-status">În așteptare...</span>
+        <span class="badge" id="partner-mood">💭</span>
+      </h3>
+      <div class="message-box">
+        <span id="partner-message">Aștept un mesaj de la tine...</span>
+        <div class="typing-indicator" id="typing-indicator">Tastează...</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-hug" onclick="sendPulse()">💓 PULSE</button>
+      <button class="btn btn-pink" onclick="openPartnerMap()">📍 LOCAȚIE</button>
+    </div>
+
+    <div class="card-spotify">
+      <div class="card-label dark">Partener ascultă</div>
+      <div class="song-row">
+        <div class="play-icon" id="partner-play-icon">⏸</div>
+        <span id="partner-song">Nimic momentan...</span>
+      </div>
+    </div>
+
+    <div class="card-spotify" style="background:#222">
+      <div class="card-label dark" style="display:flex; justify-content:space-between; align-items:center;">
+        Tu asculți
+        <button style="background:none; border:none; color:var(--green); font-size:12px; font-weight:bold; cursor:pointer;" onclick="syncSpotify()">SYNC 🎵</button>
+      </div>
+      <div class="song-row">
+        <div class="play-icon" style="background:#444; color:white;" id="my-play-icon">🎵</div>
+        <span id="my-song">Nimic momentan...</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Statusul tău (Mood)</div>
+      <div class="mood-row">
+        <button class="mood-btn" onclick="setMood('😊')">😊</button>
+        <button class="mood-btn" onclick="setMood('🥺')">🥺</button>
+        <button class="mood-btn" onclick="setMood('❤️')">❤️</button>
+        <button class="mood-btn" onclick="setMood('😴')">😴</button>
+        <button class="mood-btn" onclick="setMood('😤')">😤</button>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items: center; background: white; padding: 6px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px;">
+      <input type="text" id="msg-input" placeholder="Scrie un mesaj..." style="border:none; box-shadow:none; padding:12px;" onkeydown="handleMsgKey(event)">
+      <button class="btn btn-pink" style="width:auto; padding: 12px 20px; border-radius: 16px;" onclick="sendMessage()">Trimite</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: CALENDAR -->
+  <div class="screen" id="screen-calendar">
+    <div class="header" style="padding-top:10px;">
+      <h1 style="font-size:28px;">Calendar 📅</h1>
+    </div>
+    <div class="card">
+      <div class="cal-nav">
+        <button onclick="calPrev()">‹</button>
+        <span id="cal-month-label"></span>
+        <button onclick="calNext()">›</button>
+      </div>
+      <div class="cal-grid" id="cal-day-names"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Adaugă eveniment</div>
+      <input type="text" id="event-title-input" placeholder="Titlu eveniment (ex: Data noastră 🍕)" style="margin-bottom:10px;">
+      <input type="text" id="event-date-input" placeholder="Data (AAAA-LL-ZZ)" style="margin-bottom:10px;">
+      <button class="btn btn-pink" onclick="addEvent()">Adaugă ✨</button>
+    </div>
+    <div class="card">
+      <div class="card-label">Evenimente viitoare</div>
+      <div class="event-list" id="event-list"><p style="color:var(--grey);font-size:13px;">Niciun eveniment încă.</p></div>
+    </div>
+  </div>
+
+  <!-- SCREEN: JOURNAL -->
+  <div class="screen" id="screen-journal">
+    <div class="header" style="padding-top:10px;">
+      <h1 style="font-size:28px;">Jurnal 📓</h1>
+    </div>
+    <div class="card">
+      <div class="card-label">Scrie ceva frumos...</div>
+      <textarea id="journal-input" rows="4" placeholder="Gândurile tale pentru azi... 💭"></textarea>
+      <button class="btn btn-pink" style="margin-top:10px;" onclick="addJournalEntry()">Publică intrarea 💌</button>
+    </div>
+    <div id="journal-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+
+  <!-- SCREEN: CHALLENGES -->
+  <div class="screen" id="screen-challenges">
+    <div class="header" style="padding-top:10px;">
+      <h1 style="font-size:28px;">Provocări 🎯</h1>
+    </div>
+    <div class="score-row">
+      <div class="score-col">
+        <div class="score-num" id="my-score">0</div>
+        <div class="score-label" id="my-score-label">TU</div>
+      </div>
+      <div class="score-col" style="font-size:28px;align-self:center;">⚔️</div>
+      <div class="score-col">
+        <div class="score-num" id="partner-score">0</div>
+        <div class="score-label">PARTENER</div>
+      </div>
+    </div>
+    <div id="challenges-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+    <button class="btn btn-pink" onclick="refreshChallenges()">🎲 Challenguri noi</button>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="nav-btn active" id="nav-main" onclick="navTo('main')">
+    <span class="nav-icon">💕</span>
+    <span>Acasă</span>
+  </button>
+  <button class="nav-btn" id="nav-calendar" onclick="navTo('calendar')">
+    <span class="nav-icon">📅</span>
+    <span>Calendar</span>
+  </button>
+  <button class="nav-btn" id="nav-journal" onclick="navTo('journal')">
+    <span class="nav-icon">📓</span>
+    <span>Jurnal</span>
+  </button>
+  <button class="nav-btn" id="nav-challenges" onclick="navTo('challenges')">
+    <span class="nav-icon">🎯</span>
+    <span>Provocări</span>
+  </button>
+</nav>
+
+<div id="toast"></div>
+<input type="file" id="file-input" accept="image/*" style="display:none;" onchange="handleFileSelect(event)">
+
+<script type="importmap">
+{
+  "imports": {
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+  }
+}
+</script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
